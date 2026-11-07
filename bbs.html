@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>魔角侦探论坛 MJBBS - 侦探迷的乐园</title>
+<style>
+    /* ================= 基础 ================= */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font: 12px/1.6 "宋体", SimSun, serif;
+        color: #333;
+        background-color: #0b1e3a;
+        /* 手工星空背景 */
+        background-image:
+            radial-gradient(1px 1px at 20px 30px, #ffe9a3 100%, transparent),
+            radial-gradient(1px 1px at 130px 90px, #8fb4ea 100%, transparent),
+            radial-gradient(2px 2px at 260px 40px, #fff 100%, transparent),
+            radial-gradient(1px 1px at 80px 160px, #ffd98a 100%, transparent),
+            radial-gradient(2px 2px at 320px 200px, #ffe9a3 100%, transparent),
+            radial-gradient(1px 1px at 200px 260px, #fff 100%, transparent),
+            radial-gradient(1px 1px at 40px 300px, #8fb4ea 100%, transparent);
+        background-size: 360px 340px;
+        background-repeat: repeat;
+        padding: 18px 0 40px;
+    }
+
+    a { color: #2f5aa8; text-decoration: none; }
+    a:hover { color: #ff7d00; text-decoration: underline; }
+
+    /* 闪烁的 NEW */
+    .blink { animation: blink .9s steps(2) infinite; color: #ff2222; font-weight: bold; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ================= 主框架（表格布局，复古） ================= */
+    .frame {
+        width: 960px;
+        margin: 0 auto;
+        background: #fdf9ee;
+        border: 3px ridge #5b83c4;
+        box-shadow: 0 0 24px rgba(91, 131, 196, .45);
+    }
+
+    /* ================= 顶部工具条 ================= */
+    .utilbar {
+        background: #16305e;
+        color: #c4dbff;
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+    .utilbar a { color: #ffd98a; }
+    .utilbar a:hover { color: #fff; }
+    .utilbar .right { float: right; color: #8fb4ea; }
+    #clock { color: #7dff9e; font-family: Verdana; font-size: 11px; }
+
+    /* ================= 头部横幅 ================= */
+    .head {
+        background: linear-gradient(#0e2148, #16305e);
+        border-top: 1px solid #2f5aa8;
+        border-bottom: 2px solid #ffd23f;
+    }
+    .head td { padding: 10px; vertical-align: middle; }
+    .banner-img {
+        width: 620px;
+        height: 150px;
+        object-fit: cover;
+        border: 2px solid #ffd23f;
+        display: block;
+    }
+    .mascot-img {
+        width: 96px; height: 96px;
+        border: 2px dashed #ffd98a;
+        background: #fff;
+        display: block;
+        margin-bottom: 6px;
+    }
+    .login-cell { text-align: center; color: #c4dbff; width: 300px; }
+    .login-cell input[type=text], .login-cell input[type=password] {
+        width: 100px; font: 12px 宋体; border: 1px inset #5b83c4; padding: 1px 4px;
+    }
+    .btn-old {
+        font: bold 12px 宋体;
+        color: #4a1c00;
+        background: linear-gradient(#ffe2ae, #ffb340);
+        border: 2px outset #ffb340;
+        padding: 1px 10px;
+        cursor: pointer;
+    }
+    .btn-old:active { border-style: inset; }
+
+    /* ================= 导航条 ================= */
+    .nav {
+        background: linear-gradient(#5b83c4, #2f5aa8);
+        border-top: 1px solid #8fb4ea;
+        border-bottom: 1px solid #16305e;
+        padding: 5px 8px;
+    }
+    .nav a {
+        display: inline-block;
+        font-weight: bold;
+        color: #16305e;
+        border: 2px outset #7ea8e8;
+        background: linear-gradient(#eef5ff, #c4dbff);
+        padding: 2px 14px;
+        margin-right: 6px;
+    }
+    .nav a:hover { color: #2f5aa8; text-decoration: none; background: #eef5ff; }
+    .nav a:active { border-style: inset; }
+    .nav .srch { float: right; }
+    .nav .srch input { font: 12px 宋体; border: 1px inset #2f5aa8; padding: 2px 4px; width: 140px; }
+
+    /* ================= 公告跑马灯 ================= */
+    .notice-bar {
+        background: #f4f8ff;
+        border-bottom: 1px dashed #a9c4ee;
+        padding: 4px 6px;
+    }
+    .notice-bar b { color: #c03f00; }
+    marquee { color: #2f5aa8; font-size: 12px; }
+
+    /* ================= 统计条 ================= */
+    .stats {
+        background: #eaf2ff;
+        border-bottom: 1px solid #a9c4ee;
+        color: #2f4d8f;
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+    .stats b { color: #c03f00; }
+
+    /* ================= 面包屑 ================= */
+    .crumb { padding: 6px 10px; color: #666; }
+    .crumb a { color: #2f5aa8; font-weight: bold; }
+
+    /* ================= 分区标题 ================= */
+    .cat-title {
+        background: linear-gradient(#5b83c4, #2f5aa8);
+        color: #fff;
+        font-weight: bold;
+        font-size: 14px;
+        letter-spacing: 4px;
+        text-shadow: 1px 1px 2px #12294f;
+        padding: 6px 12px;
+        border-top: 1px solid #8fb4ea;
+        border-bottom: 2px solid #16305e;
+        margin-top: 10px;
+    }
+
+    /* ================= 版块表格 ================= */
+    table.forum { width: 100%; border-collapse: collapse; }
+    table.forum th {
+        background: linear-gradient(#dceaff, #c4dbff);
+        color: #1e3a6e;
+        border: 1px solid #a9c4ee;
+        padding: 4px 6px;
+        font-size: 12px;
+    }
+    table.forum td {
+        border: 1px solid #d3e2f7;
+        padding: 7px 8px;
+        background: #fdfeff;
+        vertical-align: middle;
+    }
+    table.forum tr.alt td { background: #f0f6ff; }
+    table.forum tr:hover td { background: #e8f1ff; }
+
+    /* CSS 画的复古文件夹图标 */
+    .folder {
+        width: 36px; height: 26px;
+        background: linear-gradient(#ffd76e, #f5a623);
+        border: 1px solid #c98a1b;
+        border-radius: 2px 4px 3px 3px;
+        position: relative;
+        margin: 0 auto;
+    }
+    .folder::before {
+        content: "";
+        position: absolute;
+        top: -6px; left: -1px;
+        width: 16px; height: 6px;
+        background: #ffd76e;
+        border: 1px solid #c98a1b;
+        border-bottom: none;
+        border-radius: 3px 3px 0 0;
+    }
+    .folder.hot { background: linear-gradient(#ff9d5c, #f56523); }
+
+    .f-name { font-size: 14px; font-weight: bold; }
+    .f-desc { color: #777; margin-top: 2px; }
+    .f-mod { color: #3a7d2c; font-size: 11px; }
+    .f-num { text-align: center; color: #2f4d8f; }
+    .f-num b { color: #c03f00; font-size: 13px; }
+    .f-last { font-size: 11px; color: #666; width: 220px; }
+    .f-last a { font-weight: bold; }
+    .f-last .by { color: #999; }
+    .f-last .who { color: #2f6ec9; }
+
+    /* ================= 在线用户 ================= */
+    .box {
+        border: 1px solid #a9c4ee;
+        margin: 12px 10px;
+        background: #fff;
+    }
+    .box-title {
+        background: linear-gradient(#dceaff, #c4dbff);
+        color: #1e3a6e;
+        font-weight: bold;
+        padding: 4px 8px;
+        border-bottom: 1px solid #a9c4ee;
+    }
+    .box-body { padding: 8px 10px; }
+    .u-admin { color: #d40000; font-weight: bold; }
+    .u-mod   { color: #0a7d12; font-weight: bold; }
+    .u-vip   { color: #c06a00; font-weight: bold; }
+    .u-norm  { color: #2358c9; }
+
+    /* ================= 最新主题 / 快速发帖 ================= */
+    table.latest { width: 100%; border-collapse: collapse; }
+    table.latest th, table.latest td {
+        border: 1px solid #c4dbff;
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+    table.latest th { background: #dceaff; color: #1e3a6e; }
+    table.latest td.c { text-align: center; color: #777; }
+
+    .post-form input[type=text] {
+        font: 12px 宋体; border: 1px inset #a9c4ee; padding: 3px 6px;
+    }
+    .post-form textarea {
+        width: 100%; height: 60px; font: 12px 宋体;
+        border: 1px inset #a9c4ee; padding: 4px 6px; resize: none;
+    }
+    .emo { color: #999; font-size: 11px; }
+
+    /* ================= 计数器 + 页脚 ================= */
+    .footer {
+        margin-top: 14px;
+        background: #12294f;
+        color: #8fb4ea;
+        text-align: center;
+        padding: 12px 8px 14px;
+        font-size: 12px;
+        border-top: 2px solid #ffd23f;
+    }
+    .footer a { color: #ffd98a; }
+    .digit {
+        display: inline-block;
+        background: #111;
+        color: #ffe95c;
+        font: bold 13px Verdana;
+        border: 1px solid #666;
+        padding: 1px 4px;
+        margin: 0 1px;
+        border-radius: 2px;
+    }
+    .counter-line { margin-bottom: 8px; color: #c4dbff; }
+    .friend { margin-top: 8px; color: #6f92c0; }
+    .disclaim { margin-top: 8px; color: #64809f; font-size: 11px; }
+
+    .clearfix::after { content: ""; display: block; clear: both; }
+</style>
+</head>
+<body>
+
+<div class="frame">
+
+    <!-- 顶部工具条 -->
+    <div class="utilbar clearfix">
+        <a href="#" onclick="setHome();return false;">设为首页</a> |
+        <a href="#" onclick="addFav();return false;">加入收藏</a> |
+        <a href="#">论坛帮助</a> |
+        <a href="#">短消息(0)</a> |
+        <a href="#">退出登录</a>
+        <span class="right">GMT+8，现在时间是 <span id="clock">--</span></span>
+    </div>
+
+    <!-- 头部横幅 -->
+    <table class="head" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td>
+                <img class="banner-img"
+                     src="img/62d0f155321522442f07a9ba354e0a3b.jpeg"
+                     alt="魔角侦探论坛横幅">
+            </td>
+            <td class="login-cell">
+                <img class="mascot-img" style="margin:0 auto 6px;"
+                     src="img/4b8feaf19d2f9680810cacf26b4663a6.jpeg"
+                     alt="魔角侦探吉祥物">
+                用户名 <input type="text" id="login-user"> 密码 <input type="password">
+                <button class="btn-old" onclick="alert('登录功能建设中，先逛逛吧～')">登录</button>
+                <a href="#" style="color:#ffd98a;">注册</a> <a href="#" style="color:#ffd98a;">忘记密码</a>
+            </td>
+        </tr>
+    </table>
+
+    <!-- 导航条 -->
+    <div class="nav clearfix">
+        <a href="#">≡ 论坛首页</a>
+        <a href="#">搜索</a>
+        <a href="#">精华区</a>
+        <a href="#">排行榜</a>
+        <a href="#">会员列表</a>
+        <a href="#">论坛帮助</a>
+        <span class="srch">
+            <input type="text" id="kw" placeholder="输入关键字…">
+            <button class="btn-old" onclick="doSearch()">搜索帖子</button>
+        </span>
+    </div>
+
+    <!-- 公告跑马灯 -->
+    <div class="notice-bar">
+        <b>【公告】</b>
+        <marquee behavior="scroll" scrollamount="4" onmouseover="this.stop()" onmouseout="this.start()">
+            ★ 欢迎各位侦探迷来到魔角侦探论坛！发帖前请先阅读《版规2.0》 ★ 严禁恶意剧透最新剧集，违者关进黑暗之角三天！ ★ 本月同人创作大赛开启，主题「我的魔角感应」，投稿请发往同人专区 ★ 新会员报到有礼，请到「新人报到区」领取魔角徽章～
+        </marquee>
+    </div>
+
+    <!-- 统计条 -->
+    <div class="stats">
+        今日新帖: <b id="today">42</b> | 昨日: <b>66</b> | 最高日: <b>1024</b> |
+        主题总数: <b>1997</b> | 帖子总数: <b>20481</b> | 注册会员: <b>8130</b> |
+        在线: <b>233</b> 人 | 欢迎新会员: <a href="#" class="u-norm">暗夜小侦探</a>
+    </div>
+
+    <!-- 面包屑 -->
+    <div class="crumb">当前位置: <a href="#">魔角侦探论坛</a> » 版块列表</div>
+
+    <!-- ============ 分区一：站务中心 ============ -->
+    <div class="cat-title">★☆ 站务中心 ☆★</div>
+    <table class="forum">
+        <tr>
+            <th style="width:56px;">状态</th>
+            <th>版块</th>
+            <th style="width:110px;">主题 / 帖数</th>
+            <th style="width:220px;">最后发表</th>
+        </tr>
+        <tr>
+            <td><div class="folder hot"></div></td>
+            <td>
+                <div class="f-name"><a href="#">论坛公告</a> <span class="blink">[置顶]</span></div>
+                <div class="f-desc">版规更新、活动通知、封禁公示</div>
+                <div class="f-mod">版主: 站长·老魔</div>
+            </td>
+            <td class="f-num"><b>88</b> / 1204</td>
+            <td class="f-last">
+                <a href="#">《十一月版规更新：灌水请去水区》</a><br>
+                <span class="by">by</span> <span class="who">站长·老魔</span> · 2026-11-01 09:12
+            </td>
+        </tr>
+        <tr class="alt">
+            <td><div class="folder"></div></td>
+            <td>
+                <div class="f-name"><a href="#">新人报到区</a></div>
+                <div class="f-desc">新来的侦探迷们，先来这里领魔角徽章！</div>
+                <div class="f-mod">版主: 橘色魔角</div>
+            </td>
+            <td class="f-num"><b>233</b> / 2001</td>
+            <td class="f-last">
+                <a href="#">新人报到！从小学追到现在</a><br>
+                <span class="by">by</span> <span class="who">暗夜小侦探</span> · 2026-11-06 22:40
+            </td>
+        </tr>
+    </table>
+
+    <!-- ============ 分区二：魔角侦探专区 ============ -->
+    <div class="cat-title">◆◇ 魔角侦探专区 ◇◆</div>
+    <table class="forum">
+        <tr>
+            <th style="width:56px;">状态</th>
+            <th>版块</th>
+            <th style="width:110px;">主题 / 帖数</th>
+            <th style="width:220px;">最后发表</th>
+        </tr>
+        <tr>
+            <td><div class="folder hot"></div></td>
+            <td>
+                <div class="f-name"><a href="#">剧情讨论区</a> <span class="blink">NEW!</span></div>
+                <div class="f-desc">每一集的观后感、伏笔分析、名场面回顾</div>
+                <div class="f-mod">版主: 名侦探毛蛋</div>
+            </td>
+            <td class="f-num"><b>521</b> / 6866</td>
+            <td class="f-last">
+                <a href="#">第52集观后感：魔角之力觉醒太燃了！</a><br>
+                <span class="by">by</span> <span class="who">天线会转弯</span> · 2026-11-07 08:15
+            </td>
+        </tr>
+        <tr class="alt">
+            <td><div class="folder hot"></div></td>
+            <td>
+                <div class="f-name"><a href="#">侦探推理社</a> <span class="blink">NEW!</span></div>
+                <div class="f-desc">开动脑筋！案件推理、真相只有一个</div>
+                <div class="f-mod">版主: 推理小说爱好者</div>
+            </td>
+            <td class="f-num"><b>312</b> / 4309</td>
+            <td class="f-last">
+                <a href="#">【推理】黑暗之角首领身份的十大猜想</a><br>
+                <span class="by">by</span> <span class="who">密室爱好者</span> · 2026-11-06 23:02
+            </td>
+        </tr>
+        <tr>
+            <td><div class="folder"></div></td>
+            <td>
+                <div class="f-name"><a href="#">角色讨论区</a></div>
+                <div class="f-desc">齐乐天人气楼 / 霍星粉丝团 / 反派也有春天</div>
+                <div class="f-mod">版主: 星星糖的约定</div>
+            </td>
+            <td class="f-num"><b>408</b> / 5123</td>
+            <td class="f-last">
+                <a href="#">齐乐天经典语录收集楼（持续更新）</a><br>
+                <span class="by">by</span> <span class="who">霍星的小粉丝</span> · 2026-11-05 19:47
+            </td>
+        </tr>
+        <tr class="alt">
+            <td><div class="folder"></div></td>
+            <td>
+                <div class="f-name"><a href="#">魔角百科 · 设定考据</a></div>
+                <div class="f-desc">世界观整理、设定问答、细节考据党集合</div>
+                <div class="f-mod">版主: 魔角研究院</div>
+            </td>
+            <td class="f-num"><b>96</b> / 1204</td>
+            <td class="f-last">
+                <a href="#">【考据】魔角感应的触发条件整理</a><br>
+                <span class="by">by</span> <span class="who">魔角研究院</span> · 2026-11-04 14:30
+            </td>
+        </tr>
+        <tr>
+            <td><div class="folder hot"></div></td>
+            <td>
+                <div class="f-name"><a href="#">同人创作区</a></div>
+                <div class="f-desc">同人图 / 同人文 / 视频剪辑，本月大赛火热进行中</div>
+                <div class="f-mod">版主: 画画的小侦探</div>
+            </td>
+            <td class="f-num"><b>187</b> / 2099</td>
+            <td class="f-last">
+                <a href="#">【原创】霍星同人图（上色完成版）</a><br>
+                <span class="by">by</span> <span class="who">画画的小侦探</span> · 2026-11-07 00:11
+            </td>
+        </tr>
+    </table>
+
+    <!-- ============ 分区三：休闲娱乐 ============ -->
+    <div class="cat-title">♪♫ 休闲娱乐区 ♫♪</div>
+    <table class="forum">
+        <tr>
+            <th style="width:56px;">状态</th>
+            <th>版块</th>
+            <th style="width:110px;">主题 / 帖数</th>
+            <th style="width:220px;">最后发表</th>
+        </tr>
+        <tr>
+            <td><div class="folder hot"></div></td>
+            <td>
+                <div class="f-name"><a href="#">灌水乐园</a></div>
+                <div class="f-desc">水贴无罪，灌水有理！经验 +3 ～</div>
+                <div class="f-mod">版主: 水王之王</div>
+            </td>
+            <td class="f-num"><b>999</b> / 18888</td>
+            <td class="f-last">
+                <a href="#">今天放学买了魔角贴纸，开心！</a><br>
+                <span class="by">by</span> <span class="who">快乐小学生</span> · 2026-11-07 12:33
+            </td>
+        </tr>
+        <tr class="alt">
+            <td><div class="folder"></div></td>
+            <td>
+                <div class="f-name"><a href="#">动漫综合讨论</a></div>
+                <div class="f-desc">其他动画、漫画话题都可以聊</div>
+                <div class="f-mod">版主: 卡酷追番人</div>
+            </td>
+            <td class="f-num"><b>156</b> / 1777</td>
+            <td class="f-last">
+                <a href="#">最近在重温的经典老番推荐帖</a><br>
+                <span class="by">by</span> <span class="who">怀旧电波</span> · 2026-11-06 18:20
+            </td>
+        </tr>
+    </table>
+
+    <!-- 在线用户 -->
+    <div class="box">
+        <div class="box-title">◆ 当前在线会员 (233人)　<small style="font-weight:normal;color:#777;">最高纪录 1024 人 · 2026-08-15</small></div>
+        <div class="box-body">
+            <span class="u-admin">站长·老魔</span>、
+            <span class="u-mod">名侦探毛蛋</span>、
+            <span class="u-mod">魔角研究院</span>、
+            <span class="u-mod">星星糖的约定</span>、
+            <span class="u-vip">天线会转弯</span>、
+            <span class="u-vip">霍星的小粉丝</span>、
+            <span class="u-norm">暗夜小侦探</span>、
+            <span class="u-norm">密室爱好者</span>、
+            <span class="u-norm">快乐小学生</span>、
+            <span class="u-norm">画画的小侦探</span>、
+            <span class="u-norm">怀旧电波</span>、
+            <span class="u-norm">水王之王</span> ……
+            <div style="margin-top:6px;color:#999;font-size:11px;">
+                用户组颜色：<span class="u-admin">■ 管理员</span>　<span class="u-mod">■ 版主</span>　<span class="u-vip">■ 荣誉会员</span>　<span class="u-norm">■ 注册会员</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 最新主题 -->
+    <div class="box">
+        <div class="box-title">◆ 本站最新主题</div>
+        <div class="box-body">
+            <table class="latest" id="latest">
+                <tr><th>主题标题</th><th style="width:120px;">作者</th><th style="width:130px;">时间</th><th style="width:70px;">回复/查看</th></tr>
+                <tr><td><a href="#">【推理】黑暗之角首领身份的十大猜想</a></td><td class="c">密室爱好者</td><td class="c">2026-11-06 23:02</td><td class="c">18 / 233</td></tr>
+                <tr><td><a href="#">【原创】霍星同人图（上色完成版）</a></td><td class="c">画画的小侦探</td><td class="c">2026-11-07 00:11</td><td class="c">9 / 102</td></tr>
+                <tr><td><a href="#">第52集观后感：魔角之力觉醒太燃了！</a></td><td class="c">天线会转弯</td><td class="c">2026-11-07 08:15</td><td class="c">26 / 418</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- 快速发帖 -->
+    <div class="box">
+        <div class="box-title">✎ 快速发帖（灌水请先三思～）</div>
+        <div class="box-body post-form">
+            标题：<input type="text" id="p-title" style="width:420px;" maxlength="30">
+            昵称：<input type="text" id="p-user" style="width:120px;" maxlength="12" value="游客侦探">
+            <div style="margin:6px 0;">
+                <textarea id="p-body" placeholder="说点什么吧…"></textarea>
+            </div>
+            <button class="btn-old" onclick="postIt()">发表主题</button>
+            <button class="btn-old" type="button" onclick="document.getElementById('p-body').value=''">清空内容</button>
+            <span class="emo">　可用表情: :) :( :D :P :'( ＼(^o^)／</span>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <div class="footer">
+        <div class="counter-line">◇ 您是本论坛第 <span id="counter"></span> 位访客，感谢您对魔角侦探的喜爱！◇</div>
+        <div>
+            <a href="#">关于我们</a> · <a href="#">联系站长</a> · <a href="#">广告投放</a> · <a href="#">论坛帮助</a> · <a href="#">返回顶部</a>
+        </div>
+        <div class="friend">
+            友情链接: <a href="#">卡酷动画</a> | <a href="#">动漫星空</a> | <a href="#">推理之门</a> | <a href="#">怀旧动漫网</a> | <a href="#">国产动画联盟</a>
+        </div>
+        <div style="margin-top:8px;">
+            Powered by <b style="color:#ffd98a;">MJBBS</b> v1.0 Build 2010 ｜ 京ICP备10086666号 ｜ © 2010-2026 魔角侦探粉丝论坛 版权所有
+        </div>
+        <div class="disclaim">本站为粉丝自发建立的非官方交流论坛，与动画官方无关，如有侵权请联系删除。</div>
+    </div>
+
+</div>
+
+<script>
+    // ---- GMT+8 时钟 ----
+    function pad(n){ return n < 10 ? '0' + n : '' + n; }
+    function tick(){
+        var d = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }));
+        document.getElementById('clock').textContent =
+            d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' ' +
+            pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    }
+    tick(); setInterval(tick, 1000);
+
+    // ---- 复古访客计数器（localStorage 记忆） ----
+    var base = 88866, n = base;
+    try { n = parseInt(localStorage.getItem('mjbbs_counter') || base, 10) + 1;
+          localStorage.setItem('mjbbs_counter', n); } catch(e){}
+    var s = ('00000000' + n).slice(-8), html = '';
+    for (var i = 0; i < s.length; i++) html += '<span class="digit">' + s[i] + '</span>';
+    document.getElementById('counter').innerHTML = html;
+
+    // ---- 顶部小功能 ----
+    function addFav(){ alert('请按 Ctrl+D 将本站加入收藏～'); }
+    function setHome(){ alert('请在浏览器设置中将本页设为主页～'); }
+    function doSearch(){
+        var k = document.getElementById('kw').value;
+        alert(k ? ('正在搜索「' + k + '」…\n搜索功能建设中！') : '请输入关键字！');
+    }
+
+    // ---- 快速发帖：实时插入最新主题 ----
+    function nowStr(){
+        var d = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }));
+        return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' ' +
+               pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }
+    function postIt(){
+        var t = document.getElementById('p-title').value.trim();
+        var u = document.getElementById('p-user').value.trim() || '游客侦探';
+        var b = document.getElementById('p-body').value.trim();
+        if (!t || !b) { alert('标题和内容都要写哦，侦探不能偷懒！'); return; }
+        var tb = document.getElementById('latest');
+        var tr = tb.insertRow(1);
+        tr.innerHTML = '<td><a href="#">' + t.replace(/</g,'&lt;') + '</a> <span class="blink">NEW!</span></td>' +
+                       '<td class="c">' + u.replace(/</g,'&lt;') + '</td>' +
+                       '<td class="c">' + nowStr() + '</td>' +
+                       '<td class="c">0 / 1</td>';
+        document.getElementById('today').textContent =
+            parseInt(document.getElementById('today').textContent, 10) + 1;
+        document.getElementById('p-title').value = '';
+        document.getElementById('p-body').value = '';
+        alert('发帖成功！你的主题已出现在「本站最新主题」里啦～');
+    }
+</script>
+
+</body>
+</html>
